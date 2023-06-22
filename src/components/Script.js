@@ -19,12 +19,9 @@ export default function Script() {
 
       setTimeout(() => {
         window.sections.forEach((section) => {
-          // Patch
-          if (event.target.getAttribute("href")) {
-            if (section.id == event.target.getAttribute("href").substring(1)) {
-              section.classList.remove("none");
-            } else section.classList.add("none");
-          }
+          if (section.id == button.getAttribute("href").substring(1)) {
+            section.classList.remove("none");
+          } else section.classList.add("none");
 
           window.loading.classList.remove("loading");
         });
