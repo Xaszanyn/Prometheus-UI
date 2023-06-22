@@ -1,4 +1,4 @@
-export default function Aside() {
+export default function Main() {
   return (
     <main>
       <section id="loading">
@@ -6,11 +6,12 @@ export default function Aside() {
       </section>
       <section id="projects" class="none">
         <h2>Projeler</h2>
+        <span class="project">Prometheus Alarm Yönetimi</span>
       </section>
       <section id="alerts">
         <h2>
           Alarmlar
-          <button onclick="openPopUp('alert-form', -1, 'create')">
+          <button id="create">
             <i class="fa-solid fa-bell"></i>Alarm Oluştur
           </button>
         </h2>
@@ -403,6 +404,11 @@ export default function Aside() {
       </section>
       <section id="settings" class="none">
         <h2>Ayarlar</h2>
+        <span style={{ marginRight: "0.5vw" }}>Tema</span>
+        <select id="theme">
+          <option value={0}>Varsayılan</option>
+          <option value={1}>Karanlık</option>
+        </select>
       </section>
     </main>
   );

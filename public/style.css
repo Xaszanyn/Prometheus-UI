@@ -10,7 +10,6 @@
   --red: #e03a3a;
 
   --highlight-purple: #601c81;
-  --highlight-blue: #0c0e85;
 
   --fade-white: #ffffff7f;
   --fade-black: #0f141f7f;
@@ -34,7 +33,7 @@ html {
 
 body {
   font-family: "Inter", sans-serif;
-
+  background-color: var(--white);
   color: var(--black);
 }
 
@@ -98,9 +97,11 @@ aside {
   background-color: var(--purple);
   color: var(--white);
   padding: 0.75rem;
+  overflow-x: hidden;
 }
 
 aside h1 {
+  min-width: 10vw;
   margin: 1rem;
 }
 
@@ -406,4 +407,35 @@ table i:hover {
 #pop-up #alert-delete button {
   position: absolute;
   bottom: 0;
+}
+
+/* ================================================== Ek ================================================== */
+
+.project {
+  display: block;
+  background-color: var(--red);
+  color: var(--white);
+  padding: 1vw;
+  border-radius: 1vw;
+  cursor: pointer;
+  transition: background-color var(--fast);
+}
+
+.project:hover {
+  background-color: var(--highlight-purple);
+}
+
+aside span {
+  min-width: 10vw;
+  overflow-x: hidden;
+}
+
+h1,
+aside span {
+  transition: opacity var(--fast);
+}
+
+aside,
+main {
+  transition: width var(--fast);
 }

@@ -1,31 +1,32 @@
-export default function Script(ALERT_LIST, HISTORY_LIST) {
-  var selectedIndex;
-  var selectedAction;
+export default function Script() {
+  window.selectedIndex = null;
+  window.selectedAction = null;
 
   // #region Section
 
-  const main = document.querySelector("main");
-  const buttons = document.querySelectorAll("aside nav > a");
-  const sections = document.querySelectorAll("main > section:not(:first-of-type)");
-  const loading = document.querySelector("main > #loading");
+  window.buttons = document.querySelectorAll("aside nav > a:not(#help)");
+  window.sections = document.querySelectorAll("main > section:not(:first-of-type)");
+  window.loading = document.querySelector("main > #loading");
 
-  buttons.forEach((button) => {
-    console.log(button);
+  window.buttons.forEach((button) => {
     button.addEventListener("click", (event) => {
-      buttons.forEach((element) => {
+      window.buttons.forEach((element) => {
         if (element == button) element.classList.add("selected");
         else element.classList.remove("selected");
       });
 
-      loading.classList.add("loading");
+      window.loading.classList.add("loading");
 
       setTimeout(() => {
-        sections.forEach((section) => {
-          if (section.id == event.target.getAttribute("href").substring(1)) {
-            section.classList.remove("none");
-          } else section.classList.add("none");
+        window.sections.forEach((section) => {
+          // Patch
+          if (event.target.getAttribute("href")) {
+            if (section.id == event.target.getAttribute("href").substring(1)) {
+              section.classList.remove("none");
+            } else section.classList.add("none");
+          }
 
-          loading.classList.remove("loading");
+          window.loading.classList.remove("loading");
         });
       }, 200);
     });
@@ -35,7 +36,13 @@ export default function Script(ALERT_LIST, HISTORY_LIST) {
 
   // #region Alert Table
 
-  var [alertTable, alertTableLoading, alertTablePagination, [alertTableLeft, alertTableRight], alertPage] = [
+  [
+    window.alertTable,
+    window.alertTableLoading,
+    window.alertTablePagination,
+    [window.alertTableLeft, window.alertTableRight],
+    window.alertPage,
+  ] = [
     document.querySelector("#alerts table"),
     document.querySelector("#alerts table + .table-loading"),
     document.querySelector("#alerts .pagination span"),
@@ -43,145 +50,150 @@ export default function Script(ALERT_LIST, HISTORY_LIST) {
     0,
   ];
 
-  alertTableLeft.addEventListener("click", (event) => {
-    if (alertTableLeft.classList.contains("disabled")) return;
-    alertPage--;
-    loadAlertTable();
+  window.alertTableLeft.addEventListener("click", (event) => {
+    if (window.alertTableLeft.classList.contains("disabled")) return;
+    window.alertPage--;
+    window.loadAlertTable();
   });
 
-  alertTableRight.addEventListener("click", (event) => {
-    if (alertTableRight.classList.contains("disabled")) return;
-    alertPage++;
-    loadAlertTable();
+  window.alertTableRight.addEventListener("click", (event) => {
+    if (window.alertTableRight.classList.contains("disabled")) return;
+    window.alertPage++;
+    window.loadAlertTable();
   });
 
-  function loadAlertTable() {
-    alertTableLoading.classList.add("loading");
+  window.loadAlertTable = () => {
+    window.alertTableLoading.classList.add("loading");
 
-    alertTable.innerHTML = `<tr><th>Alarm İsmi</th><th>Alarm Tipi</th><th>Alan</th><th>Alt Alan</th><th>Alarm Durumu</th><th>Önem Derecesi</th><th colspan="3">Yönet</th></tr>`;
+    window.alertTable.innerHTML = `<tr><th>Alarm İsmi</th><th>Alarm Tipi</th><th>Alan</th><th>Alt Alan</th><th>Alarm Durumu</th><th>Önem Derecesi</th><th colspan="3">Yönet</th></tr>`;
 
     let end = false;
 
-    for (let i = alertPage * 15; i < alertPage * 15 + 15; i++) {
-      if (i >= ALERT_LIST.length) {
-        alertTable.innerHTML += `<td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>`;
+    for (let i = window.alertPage * 15; i < window.alertPage * 15 + 15; i++) {
+      if (i >= window.ALERT_LIST.length) {
+        window.alertTable.innerHTML += `<td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>`;
         end = true;
       } else {
-        let alert = ALERT_LIST[i];
+        let alert = window.ALERT_LIST[i];
 
-        alertTable.innerHTML += `<td>${alert.name}</td><td>${alert.type}</td><td>${alert.domain}</td><td>${alert.subdomain}</td><td>${alert.status}</td><td>${alert.severity}</td>
+        window.alertTable.innerHTML += `<td>${alert.name}</td><td>${alert.type}</td><td>${alert.domain}</td><td>${alert.subdomain}</td><td>${alert.status}</td><td>${alert.severity}</td>
       <td><a href="#" onclick="openPopUp('alert-form', ${i}, 'display')"><i class="fa-solid fa-magnifying-glass"></i></a></td>
       <td><a href="#" onclick="openPopUp('alert-form', ${i}, 'edit')"><i class="fa-solid fa-pen-to-square"></i></a></td>
       <td><a href="#" onclick="openPopUp('alert-delete', ${i})"><i class="fa-solid fa-trash"></i></a></td>`;
       }
     }
 
-    if (alertPage) alertTableLeft.classList.remove("disabled");
-    else alertTableLeft.classList.add("disabled");
+    if (window.alertPage) window.alertTableLeft.classList.remove("disabled");
+    else window.alertTableLeft.classList.add("disabled");
 
-    if (end) alertTableRight.classList.add("disabled");
-    else alertTableRight.classList.remove("disabled");
+    if (end) window.alertTableRight.classList.add("disabled");
+    else window.alertTableRight.classList.remove("disabled");
 
-    alertTablePagination.innerHTML = alertPage + 1 + " / " + Math.ceil(ALERT_LIST.length / 15);
+    window.alertTablePagination.innerHTML = window.alertPage + 1 + " / " + Math.ceil(window.ALERT_LIST.length / 15);
 
-    setTimeout(() => alertTableLoading.classList.remove("loading"), 300);
-  }
+    setTimeout(() => window.alertTableLoading.classList.remove("loading"), 300);
+  };
 
-  var [historyTable, historyTableLoading, historyTablePagination, [historyTableLeft, historyTableRight], historyPage] =
-    [
-      document.querySelector("#histories table"),
-      document.querySelector("#histories table + .table-loading"),
-      document.querySelector("#histories .pagination span"),
-      [document.querySelector("#histories .pagination .left"), document.querySelector("#histories .pagination .right")],
-      0,
-    ];
+  [
+    window.historyTable,
+    window.historyTableLoading,
+    window.historyTablePagination,
+    [window.historyTableLeft, window.historyTableRight],
+    window.historyPage,
+  ] = [
+    document.querySelector("#histories table"),
+    document.querySelector("#histories table + .table-loading"),
+    document.querySelector("#histories .pagination span"),
+    [document.querySelector("#histories .pagination .left"), document.querySelector("#histories .pagination .right")],
+    0,
+  ];
 
-  historyTableLeft.addEventListener("click", (event) => {
-    if (historyTableLeft.classList.contains("disabled")) return;
-    historyPage--;
-    loadHistoryTable();
+  window.historyTableLeft.addEventListener("click", (event) => {
+    if (window.historyTableLeft.classList.contains("disabled")) return;
+    window.historyPage--;
+    window.loadHistoryTable();
   });
 
-  historyTableRight.addEventListener("click", (event) => {
-    if (historyTableRight.classList.contains("disabled")) return;
-    historyPage++;
-    loadHistoryTable();
+  window.historyTableRight.addEventListener("click", (event) => {
+    if (window.historyTableRight.classList.contains("disabled")) return;
+    window.historyPage++;
+    window.loadHistoryTable();
   });
 
-  function loadHistoryTable() {
-    historyTable.classList.add("loading");
+  window.loadHistoryTable = () => {
+    window.historyTable.classList.add("loading");
 
-    historyTable.innerHTML = `<tr><th>Alarm İsmi</th><th>Alan</th><th>Alt Alan</th><th>Alarm Tarihi</th><th>Değer</th><th colspan="2">Eşik Değer</th><th>Önem Derecesi</th></tr>`;
+    window.historyTable.innerHTML = `<tr><th>Alarm İsmi</th><th>Alan</th><th>Alt Alan</th><th>Alarm Tarihi</th><th>Değer</th><th colspan="2">Eşik Değer</th><th>Önem Derecesi</th></tr>`;
 
     let end = false;
 
-    for (let i = historyPage * 15; i < historyPage * 15 + 15; i++) {
-      if (i >= HISTORY_LIST.length) {
-        historyTable.innerHTML += `<td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>`;
+    for (let i = window.historyPage * 15; i < window.historyPage * 15 + 15; i++) {
+      if (i >= window.HISTORY_LIST.length) {
+        window.historyTable.innerHTML += `<td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>`;
         end = true;
       } else {
-        let alert = HISTORY_LIST[i];
+        let alert = window.HISTORY_LIST[i];
 
-        historyTable.innerHTML += `<td>${alert.name}</td><td>${alert.domain}</td><td>${alert.subdomain}</td><td>${alert.date}</td><td>${alert.value}</td><td>${alert.thresholdSign}</td><td>${alert.thresholdValue}</td><td>${alert.severity}</td>`;
+        window.historyTable.innerHTML += `<td>${alert.name}</td><td>${alert.domain}</td><td>${alert.subdomain}</td><td>${alert.date}</td><td>${alert.value}</td><td>${alert.thresholdSign}</td><td>${alert.thresholdValue}</td><td>${alert.severity}</td>`;
       }
     }
 
-    if (historyPage) historyTableLeft.classList.remove("disabled");
-    else historyTableLeft.classList.add("disabled");
+    if (window.historyPage) window.historyTableLeft.classList.remove("disabled");
+    else window.historyTableLeft.classList.add("disabled");
 
-    if (end) historyTableRight.classList.add("disabled");
-    else historyTableRight.classList.remove("disabled");
+    if (end) window.historyTableRight.classList.add("disabled");
+    else window.historyTableRight.classList.remove("disabled");
 
-    historyTablePagination.innerHTML = historyPage + 1 + " / " + Math.ceil(HISTORY_LIST.length / 15);
+    window.historyTablePagination.innerHTML =
+      window.historyPage + 1 + " / " + Math.ceil(window.HISTORY_LIST.length / 15);
 
-    historyTableLoading.classList.remove("loading");
-  }
+    window.historyTableLoading.classList.remove("loading");
+  };
 
-  loadAlertTable();
-  loadHistoryTable();
+  window.loadAlertTable();
+  window.loadHistoryTable();
 
   // #endregion
 
   // #region Pop-Up
 
-  const popUpScreen = document.querySelector("#pop-up-screen");
-  const popUp = document.querySelector("#pop-up");
-  const popUpSections = document.querySelectorAll("#pop-up > *:not(i)");
-  const popUpAlertTitle = document.querySelector("#pop-up #alert-form h2");
+  window.popUpScreen = document.querySelector("#pop-up-screen");
+  window.popUpSections = document.querySelectorAll("#pop-up > *:not(i)");
+  window.popUpAlertTitle = document.querySelector("#pop-up #alert-form h2");
 
-  const openPopUp = (window, index, mode) => {
-    popUpScreen.classList.remove("disabled");
+  window.openPopUp = (title, index, mode) => {
+    window.popUpScreen.classList.remove("disabled");
 
-    selectedIndex = index;
+    window.selectedIndex = index;
 
-    popUpSections.forEach((section) => {
-      if (window == section.id) section.classList.remove("disabled");
+    window.popUpSections.forEach((section) => {
+      if (title == section.id) section.classList.remove("disabled");
       else section.classList.add("disabled");
     });
 
-    if (window == "alert-form") {
-      popUpAlertTitle.innerHTML =
+    if (title == "alert-form") {
+      window.popUpAlertTitle.innerHTML =
         mode == "create" ? "Alarm Oluştur" : mode == "edit" ? "Alarm Düzenle" : "Alarm Görüntüle";
 
-      if (mode != "create") fillForm(mode);
-      else clearForm();
+      if (mode != "create") window.fillForm(mode);
+      else window.clearForm();
 
-      selectedAction = mode;
+      window.selectedAction = mode;
 
-      if (mode == "display") formButtons.classList.add("disabled");
-      else formButtons.classList.remove("disabled");
+      if (mode == "display") window.formButtons.classList.add("disabled");
+      else window.formButtons.classList.remove("disabled");
     }
   };
 
-  const closePopUp = () => {
-    popUpScreen.classList.add("disabled");
+  window.closePopUp = () => {
+    window.popUpScreen.classList.add("disabled");
   };
 
   // #endregion
 
   // #region Form
 
-  const formInputs = {
+  window.formInputs = {
     name: document.querySelector("#alert-form #form-name"),
     type: document.querySelector("#alert-form #form-type"),
     domain: document.querySelector("#alert-form #form-domain"),
@@ -191,112 +203,163 @@ export default function Script(ALERT_LIST, HISTORY_LIST) {
     thresholdValue: document.querySelector("#alert-form #form-threshold-value"),
     query: document.querySelector("#alert-form #form-query"),
   };
-  const formButtons = document.querySelector("#pop-up-buttons");
 
-  function fillForm(mode) {
-    let alert = ALERT_LIST[selectedIndex];
+  window.formButtons = document.querySelector("#pop-up-buttons");
 
-    Object.values(formInputs).forEach((input) => input.removeAttribute("disabled"));
+  window.fillForm = (mode) => {
+    let alert = window.ALERT_LIST[window.selectedIndex];
 
-    formInputs.name.value = alert.name;
-    formInputs.type.selectedIndex = alert.type == "Başarı Yüzdesi" ? 1 : alert.type == "Gecikme Süresi" ? 2 : 3;
-    formInputs.domain.selectedIndex = alert.domain == "Server" ? 1 : 2;
-    formInputs.domain.dispatchEvent(new Event("input"));
-    formInputs.subdomain.selectedIndex =
+    Object.values(window.formInputs).forEach((input) => input.removeAttribute("disabled"));
+
+    window.formInputs.name.value = alert.name;
+    window.formInputs.type.selectedIndex = alert.type == "Başarı Yüzdesi" ? 1 : alert.type == "Gecikme Süresi" ? 2 : 3;
+    window.formInputs.domain.selectedIndex = alert.domain == "Server" ? 1 : 2;
+    window.formInputs.domain.dispatchEvent(new Event("input"));
+    window.formInputs.subdomain.selectedIndex =
       alert.subdomain == "Cloud" ? 1 : alert.subdomain == "Back-end" ? 2 : alert.subdomain == "Front-end" ? 3 : 4;
-    formInputs.severity.selectedIndex = alert.severity == "Kritik" ? 1 : 2;
-    formInputs.thresholdSign.selectedIndex =
+    window.formInputs.severity.selectedIndex = alert.severity == "Kritik" ? 1 : 2;
+    window.formInputs.thresholdSign.selectedIndex =
       alert.thresholdSign == "<" ? 1 : alert.thresholdSign == "<=" ? 2 : alert.thresholdSign == ">=" ? 3 : 4;
-    formInputs.thresholdValue.value = alert.thresholdValue;
-    formInputs.query.value = alert.query;
+    window.formInputs.thresholdValue.value = alert.thresholdValue;
+    window.formInputs.query.value = alert.query;
 
     if (mode == "display") {
-      Object.values(formInputs).forEach((input) => input.setAttribute("disabled", true));
+      Object.values(window.formInputs).forEach((input) => input.setAttribute("disabled", true));
     }
-  }
+  };
 
-  formInputs.domain.addEventListener("input", () => {
-    formInputs.subdomain.selectedIndex = 0;
+  window.formInputs.domain.addEventListener("input", () => {
+    window.formInputs.subdomain.selectedIndex = 0;
 
-    formInputs.subdomain.querySelectorAll("option").forEach((option) => {
-      if (formInputs.domain.value == "Server") {
+    window.formInputs.subdomain.querySelectorAll("option").forEach((option) => {
+      if (window.formInputs.domain.value == "Server") {
         if (option.classList.contains("server")) option.removeAttribute("hidden");
         else option.setAttribute("hidden", true);
-      } else if (formInputs.domain.value == "Client") {
+      } else if (window.formInputs.domain.value == "Client") {
         if (option.classList.contains("client")) option.removeAttribute("hidden");
         else option.setAttribute("hidden", true);
       }
     });
   });
 
-  function clearForm() {
-    Object.values(formInputs).forEach((input) => input.removeAttribute("disabled"));
+  window.clearForm = () => {
+    Object.values(window.formInputs).forEach((input) => input.removeAttribute("disabled"));
 
-    formInputs.name.value = "";
-    formInputs.type.selectedIndex = 0;
-    formInputs.domain.selectedIndex = 0;
-    formInputs.domain.dispatchEvent(new Event("input"));
-    formInputs.subdomain.querySelectorAll("option").forEach((option) => option.setAttribute("hidden", true));
-    formInputs.severity.selectedIndex = 0;
-    formInputs.thresholdSign.selectedIndex = 0;
-    formInputs.thresholdValue.value = "";
-    formInputs.query.value = "";
-  }
+    window.formInputs.name.value = "";
+    window.formInputs.type.selectedIndex = 0;
+    window.formInputs.domain.selectedIndex = 0;
+    window.formInputs.domain.dispatchEvent(new Event("input"));
+    window.formInputs.subdomain.querySelectorAll("option").forEach((option) => option.setAttribute("hidden", true));
+    window.formInputs.severity.selectedIndex = 0;
+    window.formInputs.thresholdSign.selectedIndex = 0;
+    window.formInputs.thresholdValue.value = "";
+    window.formInputs.query.value = "";
+  };
 
-  function actionForm() {
-    switch (selectedAction) {
+  window.actionForm = () => {
+    switch (window.selectedAction) {
       case "create":
-        createAlert();
+        window.createAlert();
         break;
       case "edit":
-        editAlert();
+        window.editAlert();
         break;
     }
-  }
+  };
 
   // #endregion
 
   // #region Alert Operation
 
-  function createAlert() {
-    ALERT_LIST.push({
-      name: formInputs.name.value,
-      type: formInputs.type.value,
-      domain: formInputs.domain.value,
-      subdomain: formInputs.subdomain.value,
+  window.createAlert = () => {
+    window.ALERT_LIST.push({
+      name: window.formInputs.name.value,
+      type: window.formInputs.type.value,
+      domain: window.formInputs.domain.value,
+      subdomain: window.formInputs.subdomain.value,
       status: "Aktif",
-      severity: formInputs.severity.value,
-      thresholdSign: formInputs.thresholdSign.value,
-      thresholdValue: formInputs.thresholdValue.value,
-      query: formInputs.query.value,
+      severity: window.formInputs.severity.value,
+      thresholdSign: window.formInputs.thresholdSign.value,
+      thresholdValue: window.formInputs.thresholdValue.value,
+      query: window.formInputs.query.value,
     });
 
-    closePopUp();
-    loadAlertTable();
-  }
+    window.closePopUp();
+    window.loadAlertTable();
+  };
 
-  function editAlert() {
-    ALERT_LIST[selectedIndex] = {
-      name: formInputs.name.value,
-      type: formInputs.type.value,
-      domain: formInputs.domain.value,
-      subdomain: formInputs.subdomain.value,
+  window.editAlert = () => {
+    window.ALERT_LIST[window.selectedIndex] = {
+      name: window.formInputs.name.value,
+      type: window.formInputs.type.value,
+      domain: window.formInputs.domain.value,
+      subdomain: window.formInputs.subdomain.value,
       status: "Aktif",
-      severity: formInputs.severity.value,
-      thresholdSign: formInputs.thresholdSign.value,
-      thresholdValue: formInputs.thresholdValue.value,
-      query: formInputs.query.value,
+      severity: window.formInputs.severity.value,
+      thresholdSign: window.formInputs.thresholdSign.value,
+      thresholdValue: window.formInputs.thresholdValue.value,
+      query: window.formInputs.query.value,
     };
 
-    closePopUp();
-    loadAlertTable();
-  }
+    window.closePopUp();
+    window.loadAlertTable();
+  };
 
-  function deleteAlert() {
-    ALERT_LIST = ALERT_LIST.filter((alert, index) => index != selectedIndex);
-    loadAlertTable();
-    closePopUp();
-  }
+  window.deleteAlert = () => {
+    window.ALERT_LIST = window.ALERT_LIST.filter((alert, index) => index != window.selectedIndex);
+    window.loadAlertTable();
+    window.closePopUp();
+  };
 
   // #endregion
+
+  document.querySelector("#create").addEventListener("click", () => window.openPopUp("alert-form", -1, "create"));
+  document.querySelector("#clear").addEventListener("click", window.clearForm);
+  document.querySelector("#save").addEventListener("click", window.actionForm);
+  document.querySelector("#delete").addEventListener("click", window.deleteAlert);
+  document.querySelector("#close").addEventListener("click", window.closePopUp);
+
+  document.querySelector("#settings").addEventListener("change", (event) => {
+    switch (event.target.value) {
+      case "0":
+        document.documentElement.style.setProperty("--purple", "#2f0f3f");
+        document.documentElement.style.setProperty("--my-variable", "new value");
+        document.documentElement.style.setProperty("--my-variable", "new value");
+        document.documentElement.style.setProperty("--my-variable", "new value");
+        document.documentElement.style.setProperty("--my-variable", "new value");
+        break;
+      case "1":
+        document.documentElement.style.setProperty("--purple", "#010714");
+        document.documentElement.style.setProperty("--white", "#1d2226");
+        document.documentElement.style.setProperty("--blue", "#ed6213");
+        document.documentElement.style.setProperty("--black", "#fff");
+        document.documentElement.style.setProperty("--gray", "#303638");
+        document.documentElement.style.setProperty("--dark-gray", "#0f0f0f");
+        document.documentElement.style.setProperty("--red", "#d94545");
+
+        document.documentElement.style.setProperty("--highlight-purple", "#1957bd");
+
+        document.documentElement.style.setProperty("--fade-white", "#5677ad");
+        document.documentElement.style.setProperty("--fade-black", "#5e5d7a7f");
+        document.documentElement.style.setProperty("--fade-blue", "#ed6213");
+
+        document.documentElement.style.setProperty("--disabled-blue", "#4a4a4a");
+        break;
+    }
+  });
+
+  document.querySelector("#resize").addEventListener("click", (event) => {
+    console.log(event.target.dataset.resize);
+    if (event.target.dataset.resize == "open") {
+      document.querySelector("aside").style.width = "4.25vw";
+      document.querySelector("main").style.width = "95.75vw";
+      document.querySelectorAll("h1, aside span").forEach((element) => (element.style.opacity = "0"));
+    } else {
+      document.querySelector("aside").style.width = "";
+      document.querySelectorAll("h1, aside span").forEach((element) => (element.style.opacity = "1"));
+      document.querySelector("main").style.width = "";
+    }
+
+    event.target.setAttribute("data-resize", event.target.dataset.resize == "open" ? "closed" : "open");
+  });
 }

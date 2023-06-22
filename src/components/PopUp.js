@@ -66,17 +66,17 @@ export default function PopUp() {
           <hr />
           <input id="form-query" type="text" style={{ height: "2rem" }} placeholder="Prometheus Sorgusu" />
           <div id="pop-up-buttons">
-            <button onclick="clearForm()">Temizle</button>
-            <button onclick="actionForm()">Kaydet</button>
+            <button id="clear">Temizle</button>
+            <button id="save">Kaydet</button>
           </div>
         </div>
         <div id="alert-delete" class="disabled">
           Alarmı silmek istediğinize emin misiniz?
           <br />
-          <button onclick="deleteAlert()">Evet</button>
+          <button id="delete">Evet</button>
         </div>
 
-        <i class="fa fa-close" onclick="closePopUp()"></i>
+        <i class="fa fa-close" id="close"></i>
       </section>
     </div>
   );

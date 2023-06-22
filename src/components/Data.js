@@ -1,4 +1,4 @@
-export var ALERT_LIST = [
+window.ALERT_LIST = [
   {
     name: "141B-SCSRT",
     type: "Başarı Oranı",
@@ -36,10 +36,10 @@ export var ALERT_LIST = [
   },
 ];
 
-export var HISTORY_LIST = [];
+window.HISTORY_LIST = [];
 
 for (let i = 0; i < 117; i++) {
-  HISTORY_LIST.push({
+  window.HISTORY_LIST.push({
     name: random(["141B-SCSRT", "JSHandling", "Cloud Data GET"]),
     domain: random(["Server", "Client"]),
     subdomain: random(["Cloud", "Back-end", "Front-end", "Grafana"]),
