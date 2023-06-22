@@ -1,0 +1,409 @@
+/* ================================================== General ================================================== */
+
+:root {
+  --purple: #2f0f3f;
+  --white: #fff;
+  --blue: #5882f5;
+  --black: #0f141f;
+  --gray: #e6e6ec;
+  --dark-gray: #b5b5c2;
+  --red: #e03a3a;
+
+  --highlight-purple: #601c81;
+  --highlight-blue: #0c0e85;
+
+  --fade-white: #ffffff7f;
+  --fade-black: #0f141f7f;
+  --fade-blue: #5882f57f;
+
+  --disabled-blue: #5882f52f;
+
+  --fast: 0.3s;
+  --fast-delay: 0s ease 0.3s;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 1vw;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+
+  color: var(--black);
+}
+
+#root {
+  display: flex;
+  height: 100vh;
+}
+
+aside {
+  width: 20vw;
+  height: 100%;
+}
+
+main {
+  width: 80vw;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: inherit;
+  color: inherit;
+}
+
+button {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  font-size: inherit;
+  font-family: inherit;
+  border-radius: 5rem;
+}
+
+button i {
+  margin-right: 0.5rem;
+}
+
+input,
+select {
+  outline: none;
+  border: 0.1rem solid var(--dark-gray);
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.none {
+  display: none !important;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ================================================== Aside ================================================== */
+
+aside {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--purple);
+  color: var(--white);
+  padding: 0.75rem;
+}
+
+aside h1 {
+  margin: 1rem;
+}
+
+aside nav {
+  margin-bottom: auto;
+}
+
+aside nav > a,
+aside .line {
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  color: var(--fade-white);
+  transition: background-color var(--fast), color var(--fast);
+}
+
+aside nav > a.selected,
+aside .line.selected {
+  background-color: var(--highlight-purple);
+  color: var(--white) !important;
+}
+
+aside nav > a:hover,
+aside .line:hover {
+  color: var(--fade-white);
+  background-color: var(--highlight-purple);
+}
+
+aside nav > a i,
+aside .line i {
+  font-size: 1.25rem;
+  margin-right: 0.5rem;
+}
+
+/* ================================================== Main ================================================== */
+
+main {
+  position: relative;
+}
+
+main > #loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background-color: var(--white);
+  z-index: 100;
+  transition: opacity var(--fast), transform var(--fast-delay);
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+main > #loading.loading {
+  opacity: 1;
+  transform: translateX(0);
+
+  transition: opacity var(--fast);
+}
+
+main > section {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+main > section:not(:first-of-type) {
+  padding: 1rem;
+}
+
+/* ================================================== Section ================================================== */
+
+section h2 {
+  font-size: 2rem;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+section h2 > button {
+  padding: 0.35rem 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5rem;
+  background-color: var(--blue);
+  color: var(--white);
+  cursor: pointer;
+  border: 0.2rem solid var(--blue);
+  transition: background-color var(--fast), color var(--fast);
+}
+
+section h2 > button:hover {
+  background-color: var(--white);
+  color: var(--blue);
+}
+
+section h2 > button:first-of-type {
+  margin-left: auto;
+}
+
+/* ================================================== Table ================================================== */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+table td,
+table th {
+  text-align: left;
+  border: 0.2rem solid var(--gray);
+  padding: 0.25rem;
+}
+
+table + .table-loading {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--fade-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity var(--fast), transform var(--fast-delay);
+}
+
+table + .table-loading.loading {
+  transition: opacity var(--fast);
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.pagination {
+  font-weight: bold;
+}
+
+.pagination i {
+  padding: 0.5rem 0.65rem;
+  border-radius: 5rem;
+  background-color: var(--fade-blue);
+  color: var(--white);
+  transition: background-color var(--fast);
+}
+
+.pagination i:hover {
+  background-color: var(--blue);
+}
+
+.pagination .disabled {
+  cursor: auto;
+}
+
+.pagination .disabled i {
+  background-color: var(--disabled-blue);
+}
+
+.pagination > *:not(i:last-of-type) {
+  margin-right: 1rem;
+}
+
+#alerts table td:nth-child(7),
+#alerts table td:nth-child(8),
+#alerts table td:nth-child(9) {
+  width: 2rem;
+  text-align: center;
+}
+
+table i {
+  transition: color var(--fast);
+}
+
+table i:hover {
+  color: var(--red);
+}
+
+/* ================================================== Pop-Up ================================================== */
+
+#pop-up-screen {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--fade-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--fast);
+}
+
+#pop-up-screen.disabled {
+  transition: opacity var(--fast), transform var(--fast-delay);
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+#pop-up {
+  padding: 1rem;
+  background-color: var(--white);
+  position: relative;
+  transition: transform var(--fast);
+}
+
+#pop-up-screen.disabled #pop-up {
+  transform: translateY(5rem);
+}
+
+#pop-up h2 {
+  font-size: 1.5rem;
+}
+
+#pop-up h3 {
+  font-size: 1rem;
+}
+
+#pop-up hr {
+  border: 0.1rem solid var(--black);
+  margin-bottom: 1rem;
+}
+
+#pop-up #alert-form .center {
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+#pop-up #alert-form .center > * {
+  width: calc(50% - 0.5rem);
+  height: 2rem;
+}
+
+#pop-up #alert-form .center.trial > * {
+  width: calc(33% - 0.5rem);
+}
+
+#pop-up #alert-form input,
+#pop-up #alert-form select {
+  padding-left: 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+}
+
+#pop-up .fa-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  color: var(--red);
+  cursor: pointer;
+}
+
+#pop-up #alert-form {
+  display: flex;
+  flex-direction: column;
+  width: 40vw;
+  height: 30vw;
+}
+
+#pop-up #pop-up-buttons {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+}
+
+#pop-up #pop-up-buttons button,
+#pop-up #alert-delete button {
+  background-color: var(--fade-blue);
+  padding: 0.3rem 0.75rem;
+  color: var(--white);
+  cursor: pointer;
+  transition: var(--fast);
+}
+
+#pop-up #pop-up-buttons button:first-of-type {
+  margin-left: auto;
+  margin-right: 0.5rem;
+}
+
+#pop-up #pop-up-buttons button:hover,
+#pop-up #alert-delete button:hover {
+  background-color: var(--blue);
+}
+
+#pop-up #pop-up-buttons.disabled {
+  display: none;
+}
+
+#pop-up > *.disabled {
+  display: none !important;
+}
+
+#pop-up #alert-delete {
+  width: 30vw;
+  height: 4vw;
+  padding-top: 0.25rem;
+  position: relative;
+}
+
+#pop-up #alert-delete button {
+  position: absolute;
+  bottom: 0;
+}
