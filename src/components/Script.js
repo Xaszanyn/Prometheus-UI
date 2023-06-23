@@ -355,9 +355,9 @@ export default function Script() {
     }
   });
 
-  document.querySelector("#resize").addEventListener("click", (event) => {
-    console.log(event.target.dataset.resize);
-    if (event.target.dataset.resize == "open") {
+  window.resize = document.querySelector("#resize");
+  window.resize.addEventListener("click", (event) => {
+    if (window.resize.dataset.resize == "open") {
       document.querySelector("aside").style.width = "4.25vw";
       document.querySelector("main").style.width = "95.75vw";
       document.querySelectorAll("h1, aside span").forEach((element) => (element.style.opacity = "0"));
@@ -367,7 +367,7 @@ export default function Script() {
       document.querySelector("main").style.width = "";
     }
 
-    event.target.setAttribute("data-resize", event.target.dataset.resize == "open" ? "closed" : "open");
+    window.resize.setAttribute("data-resize", window.resize.dataset.resize == "open" ? "closed" : "open");
   });
 
   document.querySelectorAll("textarea").forEach((textarea) => {
