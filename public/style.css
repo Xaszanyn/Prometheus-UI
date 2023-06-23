@@ -103,6 +103,7 @@ aside {
 aside h1 {
   min-width: 10vw;
   margin: 1rem;
+  color: #fff;
 }
 
 aside nav {
@@ -438,4 +439,25 @@ aside span {
 aside,
 main {
   transition: width var(--fast);
+}
+
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+  display: block;
+  width: 30vw;
+  resize: none;
+  padding: 0.5vw;
+  margin-bottom: 1vw;
+}
+
+.mails p {
+  background-color: var(--red);
+  color: var(--white);
+  padding: 0.25vw 0.5vw;
+  margin-right: 0.5vw;
+  margin-bottom: 2vw;
+  display: inline-block;
+  border-radius: 0.25vw;
 }

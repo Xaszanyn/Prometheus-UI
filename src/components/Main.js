@@ -400,7 +400,28 @@ export default function Main() {
         </div>
       </section>
       <section id="statistics" class="none">
-        <h2>İstatistik</h2>
+        <h2>Yapılandırma</h2>
+        <div>
+          <span style={{ marginBottom: "0.5vw", display: "block" }}>
+            Yönetici Mail İletim Listesi (Lütfen virgülle ayırın.)
+          </span>
+          <textarea id="manager" rows={3}></textarea>
+          <div class="mails manager"></div>
+        </div>
+        <div>
+          <span style={{ marginBottom: "0.5vw", display: "block" }}>
+            İzleme Ekibi Mail İletim Listesi (Lütfen virgülle ayırın.)
+          </span>
+          <textarea id="monitoring" rows={3}></textarea>
+          <div class="mails monitoring"></div>
+        </div>
+        <div>
+          <span style={{ marginBottom: "0.5vw", display: "block" }}>
+            Sunucu Yönetim Ekibi Mail İletim Listesi (Lütfen virgülle ayırın.)
+          </span>
+          <textarea id="server" rows={3}></textarea>
+          <div class="mails server"></div>
+        </div>
       </section>
       <section id="settings" class="none">
         <h2>Ayarlar</h2>

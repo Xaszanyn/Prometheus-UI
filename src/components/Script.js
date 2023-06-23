@@ -320,10 +320,20 @@ export default function Script() {
     switch (event.target.value) {
       case "0":
         document.documentElement.style.setProperty("--purple", "#2f0f3f");
-        document.documentElement.style.setProperty("--my-variable", "new value");
-        document.documentElement.style.setProperty("--my-variable", "new value");
-        document.documentElement.style.setProperty("--my-variable", "new value");
-        document.documentElement.style.setProperty("--my-variable", "new value");
+        document.documentElement.style.setProperty("--white", "#fff");
+        document.documentElement.style.setProperty("--blue", "#5882f5");
+        document.documentElement.style.setProperty("--black", "#0f141f");
+        document.documentElement.style.setProperty("--gray", "#e6e6ec");
+        document.documentElement.style.setProperty("--dark-gray", "#b5b5c2");
+        document.documentElement.style.setProperty("--red", "#e03a3a");
+
+        document.documentElement.style.setProperty("--highlight-purple", "#601c81");
+
+        document.documentElement.style.setProperty("--fade-white", "#ffffff7f");
+        document.documentElement.style.setProperty("--fade-black", "#0f141f7f");
+        document.documentElement.style.setProperty("--fade-blue", "#5882f57f");
+
+        document.documentElement.style.setProperty("--disabled-blue", "#5882f52f");
         break;
       case "1":
         document.documentElement.style.setProperty("--purple", "#010714");
@@ -358,5 +368,30 @@ export default function Script() {
     }
 
     event.target.setAttribute("data-resize", event.target.dataset.resize == "open" ? "closed" : "open");
+  });
+
+  document.querySelectorAll("textarea").forEach((textarea) => {
+    textarea.addEventListener("input", (event) => {
+      let mails = document.querySelector(`.mails.${textarea.id}`);
+
+      mails.innerHTML = "";
+
+      localStorage.setItem(textarea.id, textarea.value);
+
+      textarea.value.split(",").forEach((mail) => {
+        mail = mail.trim();
+
+        if (mail) mails.innerHTML += `<p>${mail}</p>`;
+      });
+    });
+  });
+
+  document.querySelectorAll("textarea").forEach((textarea) => {
+    let value = localStorage.getItem(textarea.id);
+
+    if (value) {
+      textarea.value = value;
+      textarea.dispatchEvent(new Event("input"));
+    }
   });
 }

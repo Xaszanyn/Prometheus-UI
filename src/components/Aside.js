@@ -16,8 +16,8 @@ export default function Aside() {
           <span>Alarm Geçmişi</span>
         </a>
         <a href="#statistics">
-          <i class="fa-solid fa-chart-line"></i>
-          <span>İstatistik</span>
+          <i class="fa-solid fa-wrench"></i>
+          <span>Yapılandırma</span>
         </a>
         <a href="#settings">
           <i class="fa-solid fa-gear"></i>

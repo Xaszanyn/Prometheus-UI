@@ -58,3 +58,41 @@ function random(list) {
 function randint() {
   return new Date(Math.floor(Math.random() * 100000000000) + 1500000000000).toLocaleString("tr");
 }
+
+export async function getAlerts() {
+  return await fetch("http://localhost:8080/api/alerts").then((response) =>
+    response.json().then((response) => response.data)
+  );
+}
+
+export async function getAlertHistories() {
+  return await fetch("http://localhost:8080/api/histories").then((response) =>
+    response.json().then((response) => response.data)
+  );
+}
+
+export async function createAlert(alert) {
+  return await fetch("http://localhost:8080/api/alerts/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(alert),
+  }).then((response) => response.json().then((response) => response.responseCode));
+}
+
+export async function editAlert(alert) {
+  return await fetch("http://localhost:8080/api/alerts/update", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(alert),
+  }).then((response) => response.json().then((response) => response.responseCode));
+}
+
+export async function deleteAlert(alert) {
+  return await fetch(`http://localhost:8080/api/alerts/delete/${alert.id}`, {
+    method: "DELETE",
+  }).then((response) => response.json().then((response) => response.responseCode));
+}
